@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Tic tac toe</title>
+  </head>
+  <body>
+    <h1>Tic tac toe</h1>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      // is this shorthand for document.ready()?
+      $(function () {
+        var socket = io();
+        // $('form').submit(function(){
+        //   socket.emit('chat message', $('#m').val());
+        //   $('#m').val('');
+        //   return false;
+        // });
+        socket.on('chat message', function(msg){
+          // Oh wow i didn't know you could use $ like this:
+          $('#messages').append($('<li>').text(msg));
+        });
+
+        socket.on('disconnect', function(name) {
+          for (var i=0; i < data.length; i++) {
+            $('body').append($('<p>').text(name[i]));
+          }
+        });
+
+        socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+          socket.emit('hi', 'lol', function (data) {
+            console.log(data); // data will be 'woot'
+            for (var i=0; i < data.length; i++) {
+              $('body').append($('<p>').text(data[i]));
+            }
+          });
+        });
+      });
+    </script>
+
+  </body>
+</html>
