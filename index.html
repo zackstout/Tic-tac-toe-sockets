@@ -12,9 +12,15 @@
 
     </div>
 
+    <div id="log">
+
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
+
+      var users = [];
       // is this shorthand for document.ready()?
       $(function () {
         var socket = io();
@@ -29,6 +35,7 @@
 
         socket.on('ids', function(ids) {
           console.log(ids);
+          users = ids;
           $('#usersOnline').empty();
 
           for (var i=0; i < ids.length; i++) {
@@ -36,13 +43,22 @@
           }
         })
 
+        // $('.send').on('click', () => {
+        //   socket.emit("private", { msg: 'ello', to: users[0] });
+        // })
+        //
+        // socket.on("private", function(data) {
+        //   $('#log').append('<li class="private"><em><strong>'+ data.from +' -> '+ data.to +'</strong>: '+ data.msg +'</em></li>');
+        // });
 
 
-        socket.on('disconnect', function(name) {
-          for (var i=0; i < data.length; i++) {
-            $('body').append($('<p>').text(name[i]));
-          }
-        });
+
+
+        // socket.on('disconnect', function(name) {
+        //   for (var i=0; i < data.length; i++) {
+        //     $('body').append($('<p>').text(name[i]));
+        //   }
+        // });
 
         // socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
         //   socket.emit('hi', 'lol', function (data) {

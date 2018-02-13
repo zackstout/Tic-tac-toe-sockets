@@ -30,7 +30,10 @@ io.on('connection', function(socket){
 
 
 
-
+  // socket.on("private", function(data) {
+  //   io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
+  //   socket.emit("private", { from: socket.id, to: data.to, msg: data.msg });
+  // });
 
 
 
