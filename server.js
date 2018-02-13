@@ -9,26 +9,37 @@ var userIds = [];
 var userNames = [];
 
 app.get('/', function(req, res){
-  // res.send('<h1>Hello world</h1>');
 
   // Hmm...now we can't source files into index in the usual way. Might be better to use 'static':
   res.sendFile(__dirname + '/index.html');
 });
 
+
 // Differs from Ratchet in that you can only open up the one server, but see it in multiple tabs/browsers.
 io.on('connection', function(socket){
-  socket.broadcast.emit('user connected');
 
-  //this works...
-  socket.on('hi', function (name, fn) {
-    fn(userNames);
-  });
-
+  // socket.broadcast.emit
+  // Listen for an event called 'logon' that triggers on client side:
   socket.on('logon', function(name) {
     console.log(name);
-    io.emit('logon', name);
+    userIds.push(socket.id);
+    // Send a response to client or other users:
+    io.emit('logon', userIds);
   });
 
+
+
+
+
+
+
+
+  // socket.broadcast.emit('user connected');
+
+    //this works...
+    socket.on('hi', function (name, fn) {
+      fn(userNames);
+    });
   // io.emit('names', userNames);
 
   console.log('a user connected', socket.id);
@@ -38,10 +49,10 @@ io.on('connection', function(socket){
     console.log('user disconnected', socket.id);
     // names.push(userNames[userIds.indexOf(socket.id)]);
     //
-    // userIds.splice(userIds.indexOf(socket.id), 1);
+    userIds.splice(userIds.indexOf(socket.id), 1);
     // userNames.splice(userIds.indexOf(socket.id), 1);
     //
-    // io.emit('names', userNames);
+    io.emit('ids', userIds);
   });
 
   socket.on('private message', function (from, msg) {

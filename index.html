@@ -14,20 +14,21 @@
       // is this shorthand for document.ready()?
       $(function () {
         var socket = io();
-        // $('form').submit(function(){
-        //   socket.emit('chat message', $('#m').val());
-        //   $('#m').val('');
-        //   return false;
-        // });
+
+        // Emit to the server when user connects. Can also pass it a callback function:
         socket.emit('logon', 1)
 
+        // Handle event called 'logon' coming from the server:
         socket.on('logon', function(n) {
           console.log(n);
+          //$('#messages').append($('<li>').text(msg));
+        });
+
+        socket.on('ids', function(i) {
+          console.log(i);
         })
-        // socket.on('chat message', function(msg){
-        //   // Oh wow i didn't know you could use $ like this:
-        //   $('#messages').append($('<li>').text(msg));
-        // });
+
+
 
         socket.on('disconnect', function(name) {
           for (var i=0; i < data.length; i++) {
