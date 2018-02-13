@@ -19,10 +19,15 @@
         //   $('#m').val('');
         //   return false;
         // });
-        socket.on('chat message', function(msg){
-          // Oh wow i didn't know you could use $ like this:
-          $('#messages').append($('<li>').text(msg));
-        });
+        socket.emit('logon', 1)
+
+        socket.on('logon', function(n) {
+          console.log(n);
+        })
+        // socket.on('chat message', function(msg){
+        //   // Oh wow i didn't know you could use $ like this:
+        //   $('#messages').append($('<li>').text(msg));
+        // });
 
         socket.on('disconnect', function(name) {
           for (var i=0; i < data.length; i++) {

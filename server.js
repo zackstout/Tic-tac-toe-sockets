@@ -24,20 +24,24 @@ io.on('connection', function(socket){
     fn(userNames);
   });
 
-  io.emit('names', userNames);
+  socket.on('logon', function(name) {
+    console.log(name);
+    io.emit('logon', name);
+  });
+
+  // io.emit('names', userNames);
 
   console.log('a user connected', socket.id);
-  userIds.push(socket.id);
-  userNames.push(names.shift());
-  // users.push(names.shift());
+  // userIds.push(socket.id);
+  // userNames.push(names.shift());
   socket.on('disconnect', function(){
     console.log('user disconnected', socket.id);
-    names.push(userNames[userIds.indexOf(socket.id)]);
-
-    userIds.splice(userIds.indexOf(socket.id), 1);
-    userNames.splice(userIds.indexOf(socket.id), 1);
-
-    io.emit('names', userNames);
+    // names.push(userNames[userIds.indexOf(socket.id)]);
+    //
+    // userIds.splice(userIds.indexOf(socket.id), 1);
+    // userNames.splice(userIds.indexOf(socket.id), 1);
+    //
+    // io.emit('names', userNames);
   });
 
   socket.on('private message', function (from, msg) {
