@@ -12,6 +12,10 @@
 
     </div>
 
+    <div id="otherUsers">
+
+    </div>
+
     <div id="log">
 
     </div>
@@ -34,13 +38,15 @@
         });
 
         socket.on('ids', function(ids) {
-          console.log(ids);
+          // console.log(ids, socket.id);
           users = ids;
           $('#usersOnline').empty();
 
           for (var i=0; i < ids.length; i++) {
             $('#usersOnline').append($('<p>').text(ids[i]));
           }
+
+
         })
 
         // $('.send').on('click', () => {
