@@ -8,6 +8,10 @@
   <body>
     <h1>Tic tac toe</h1>
 
+    <div id="usersOnline">
+
+    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
@@ -20,12 +24,16 @@
 
         // Handle event called 'logon' coming from the server:
         socket.on('logon', function(n) {
-          console.log(n);
-          //$('#messages').append($('<li>').text(msg));
+          console.log('my id is: ', n);
         });
 
-        socket.on('ids', function(i) {
-          console.log(i);
+        socket.on('ids', function(ids) {
+          console.log(ids);
+          $('#usersOnline').empty();
+
+          for (var i=0; i < ids.length; i++) {
+            $('#usersOnline').append($('<p>').text(ids[i]));
+          }
         })
 
 
@@ -36,14 +44,14 @@
           }
         });
 
-        socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
-          socket.emit('hi', 'lol', function (data) {
-            console.log(data); // data will be 'woot'
-            for (var i=0; i < data.length; i++) {
-              $('body').append($('<p>').text(data[i]));
-            }
-          });
-        });
+        // socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
+        //   socket.emit('hi', 'lol', function (data) {
+        //     console.log(data); // data will be 'woot'
+        //     for (var i=0; i < data.length; i++) {
+        //       $('body').append($('<p>').text(data[i]));
+        //     }
+        //   });
+        // });
       });
     </script>
 

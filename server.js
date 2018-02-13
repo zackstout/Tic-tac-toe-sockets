@@ -24,7 +24,8 @@ io.on('connection', function(socket){
     console.log(name);
     userIds.push(socket.id);
     // Send a response to client or other users:
-    io.emit('logon', userIds);
+    io.emit('logon', socket.id);
+    io.emit('ids', userIds);
   });
 
 
@@ -37,9 +38,9 @@ io.on('connection', function(socket){
   // socket.broadcast.emit('user connected');
 
     //this works...
-    socket.on('hi', function (name, fn) {
-      fn(userNames);
-    });
+    // socket.on('hi', function (name, fn) {
+    //   fn(userNames);
+    // });
   // io.emit('names', userNames);
 
   console.log('a user connected', socket.id);
@@ -55,9 +56,9 @@ io.on('connection', function(socket){
     io.emit('ids', userIds);
   });
 
-  socket.on('private message', function (from, msg) {
-    console.log('I received a private message by ', from, ' saying ', msg);
-  });
+  // socket.on('private message', function (from, msg) {
+  //   console.log('I received a private message by ', from, ' saying ', msg);
+  // });
   // socket.on('chat message', function(msg){
   //   console.log('message: ' + msg);
   //   io.emit('chat message', msg);
