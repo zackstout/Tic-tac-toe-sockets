@@ -28,6 +28,12 @@ io.on('connection', function(socket){
     io.emit('ids', userIds);
   });
 
+  socket.on('invite', function(inv) {
+    console.log(inv);
+    console.log(inv.from == socket.id);
+    socket.broadcast.to(inv.to).emit('msg', inv.from);
+  });
+
 
 
   // socket.on("private", function(data) {

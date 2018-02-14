@@ -11,11 +11,11 @@
     <div id="usersOnline">
 
     </div>
-
+    <hr>
     <div id="otherUsers">
 
     </div>
-
+    <hr>
     <div id="log">
 
     </div>
@@ -29,21 +29,45 @@
       $(function () {
         var socket = io();
 
+        //  Send invite:
+        $('#otherUsers').on('click', 'button', (event) => {
+          event.preventDefault();
+          console.log($(event.currentTarget).data('to'));
+
+          socket.emit('invite', {
+            to: $(event.currentTarget).data('to'),
+            from: $(event.currentTarget).data('from')
+          });
+        });
+
+        // Receive invite:
+        socket.on('msg', function(from) {
+          console.log(from);
+        });
+
         // Emit to the server when user connects. Can also pass it a callback function:
         socket.emit('logon', 1)
 
         // Handle event called 'logon' coming from the server:
         socket.on('logon', function(n) {
+          //note, will log this out for EVERY logon for every user:
           console.log('my id is: ', n);
         });
 
         socket.on('ids', function(ids) {
-          // console.log(ids, socket.id);
+          console.log(ids, socket.id);
           users = ids;
           $('#usersOnline').empty();
+          $('#otherUsers').empty();
 
           for (var i=0; i < ids.length; i++) {
             $('#usersOnline').append($('<p>').text(ids[i]));
+
+            if (socket.id !== ids[i]) {
+              $('#otherUsers').append($('<span>').text(ids[i]));
+              var btn = '<button class="sub" data-to="' + ids[i] + '" data-from="' + socket.id + '">Send</button>';
+              $('#otherUsers').append($('<span>').append(btn));
+            }
           }
 
 
