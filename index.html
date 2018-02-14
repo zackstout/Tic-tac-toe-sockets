@@ -57,7 +57,7 @@
         // Accept invite:
         $('#log').on('click', '.play', (event) => {
           event.preventDefault();
-          drawTable();
+          // drawTable();
 
           // console.log((event.currentTarget).data('to'));
           var p1, p2;
@@ -75,6 +75,20 @@
             p1: p1,
             p2: p2
           });
+        });
+
+        // Draw both grids:
+        socket.on('gameStart', function(players) {
+          console.log(players);
+          // actually this only draws it for the inviting player (the one who did not click Play)...:
+          // Because broadcast only sends to others!
+          drawTable();
+
+          if (socket.id == players.p1) {
+            $('#log').append("You are player one!");
+          } else {
+            $('#log').append("you are player two :(");
+          }
         });
 
         //  Send invite:

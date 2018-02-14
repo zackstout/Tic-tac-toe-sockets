@@ -37,6 +37,14 @@ io.on('connection', function(socket){
   socket.on('startGame', function(players) {
     var p1 = players.p1;
     var p2 = players.p2;
+    io.emit('gameStart', {p1: p1, p2: p2});
+    if (socket.id == p1) {
+      socket.broadcast.to(p2).emit('gameStart', {p1: p1, p2: p2});
+    } else  if (socket.id == p2) {
+      socket.broadcast.to(p1).emit('gameStart', {p1: p1, p2: p2});
+    }
+
+
   });
 
 
