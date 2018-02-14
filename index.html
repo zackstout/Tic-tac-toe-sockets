@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <title>Tic tac toe</title>
+    <!-- Really unsure why unable to source stuff in as usual -->
   </head>
   <body>
     <h1>Tic tac toe</h1>
@@ -19,18 +20,65 @@
     <div id="log">
 
     </div>
+    <hr>
+    <div id="game">
+
+    </div>
+
+    <style media="screen">
+      td {
+        height: 100px;
+        width: 100px;
+        background-color: tomato;
+      }
+    </style>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
 
+
       var users = [];
+
+      function drawTable() {
+        // var table = '<p id="hi">hello</p>'
+        var table = '<table class="gameTable">' +
+        '<tr><td></td><td></td><td></td></tr>' +
+        '<tr><td></td><td></td><td></td></tr>' +
+        '<tr><td></td><td></td><td></td></table>';
+        $('#game').append(table);
+        // console.log($('#game'));
+      }
+
       // is this shorthand for document.ready()?
       $(function () {
         var socket = io();
 
+        // Accept invite:
+        $('#log').on('click', '.play', (event) => {
+          event.preventDefault();
+          drawTable();
+
+          // console.log((event.currentTarget).data('to'));
+          var p1, p2;
+          if (Math.random() > 0.5) {
+            p1 = $(event.currentTarget).data('to');
+            p2 = $(event.currentTarget).data('from');
+          } else {
+            p2 = $(event.currentTarget).data('to');
+            p1 = $(event.currentTarget).data('from');
+          }
+
+          console.log(p1, p2);
+
+          socket.emit('startGame', {
+            p1: p1,
+            p2: p2
+          });
+        });
+
         //  Send invite:
-        $('#otherUsers').on('click', 'button', (event) => {
+        $('#otherUsers').on('click', '.sub', (event) => {
           event.preventDefault();
           console.log($(event.currentTarget).data('to'));
 
@@ -42,7 +90,10 @@
 
         // Receive invite:
         socket.on('msg', function(from) {
-          console.log(from);
+          // console.log(from);
+          $('#log').append(from + ' would like to play a game with you!');
+          var play = '<button class="play" data-from="' + from + '" data-to="' + socket.id + '">Play</button>';
+          $('#log').append(play);
         });
 
         // Emit to the server when user connects. Can also pass it a callback function:
@@ -73,31 +124,6 @@
 
         })
 
-        // $('.send').on('click', () => {
-        //   socket.emit("private", { msg: 'ello', to: users[0] });
-        // })
-        //
-        // socket.on("private", function(data) {
-        //   $('#log').append('<li class="private"><em><strong>'+ data.from +' -> '+ data.to +'</strong>: '+ data.msg +'</em></li>');
-        // });
-
-
-
-
-        // socket.on('disconnect', function(name) {
-        //   for (var i=0; i < data.length; i++) {
-        //     $('body').append($('<p>').text(name[i]));
-        //   }
-        // });
-
-        // socket.on('connect', function () { // TIP: you can avoid listening on `connect` and listen on events directly too!
-        //   socket.emit('hi', 'lol', function (data) {
-        //     console.log(data); // data will be 'woot'
-        //     for (var i=0; i < data.length; i++) {
-        //       $('body').append($('<p>').text(data[i]));
-        //     }
-        //   });
-        // });
       });
     </script>
 

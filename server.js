@@ -34,6 +34,11 @@ io.on('connection', function(socket){
     socket.broadcast.to(inv.to).emit('msg', inv.from);
   });
 
+  socket.on('startGame', function(players) {
+    var p1 = players.p1;
+    var p2 = players.p2;
+  });
+
 
 
   // socket.on("private", function(data) {
