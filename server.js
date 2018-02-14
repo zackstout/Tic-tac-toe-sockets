@@ -8,6 +8,9 @@ var names = ['alpha', 'beta', 'gamma', 'delta', 'epsilon'];
 var userIds = [];
 var userNames = [];
 
+var games = [];
+var numOfGames = 0;
+
 app.get('/', function(req, res){
 
   // Hmm...now we can't source files into index in the usual way. Might be better to use 'static':
@@ -34,19 +37,36 @@ io.on('connection', function(socket){
     socket.broadcast.to(inv.to).emit('msg', inv.from);
   });
 
+  socket.on('makeMove', function(move) {
+    console.log(move);
+  });
+
   socket.on('startGame', function(players) {
     var p1 = players.p1;
     var p2 = players.p2;
-    if (socket.id == p1) {
-      // THIS IS WEIRD: when we log this out, the doubling-effect only happens half the time!
-      // socket.broadcast.to(p2).emit('gameStart', {p1: p1, p2: p2});
-      io.emit('gameStart', {p1: p1, p2: p2});
+    var game = {
+      id: numOfGames,
+      p1: p1,
+      p2: p2,
+      vals: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+      mover: p1
+    };
+    games.push(game);
+    io.emit('startGame', game);
 
-    } else  if (socket.id == p2) {
-      // socket.broadcast.to(p1).emit('gameStart', {p1: p1, p2: p2});
-      io.emit('gameStart', {p1: p1, p2: p2});
 
-    }
+    numOfGames ++;
+
+    // if (socket.id == p1) {
+    //   // THIS IS WEIRD: when we log this out, the doubling-effect only happens half the time!
+    //   // socket.broadcast.to(p2).emit('gameStart', {p1: p1, p2: p2});
+    //   io.emit('gameStart', {p1: p1, p2: p2});
+    //
+    // } else  if (socket.id == p2) {
+    //   // socket.broadcast.to(p1).emit('gameStart', {p1: p1, p2: p2});
+    //   io.emit('gameStart', {p1: p1, p2: p2});
+    //
+    // }
 
 
   });
